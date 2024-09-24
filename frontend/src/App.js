@@ -20,7 +20,7 @@ import ClassesDetails from "./pages/ClassesDetails";
 
 const ProtectedRoute = ({ children }) => {
   const { auth, login } = useAuth();
-  const [loading, setLoading] = useState(true); // Loading state while checking auth
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,14 +30,14 @@ const ProtectedRoute = ({ children }) => {
           `${process.env.REACT_APP_API_BASE_URL}/auth/checklogin`,
           {
             method: "GET",
-            credentials: "include", // Include cookies for the auth token
+            credentials: "include",
           }
         );
         const data = await response.json();
 
         if (response.ok && data.ok) {
-          login({ userId: data.userId }); // Set user in context
-          setLoading(false); // User is logged in, loading is done
+          login({ userId: data.userId });
+          setLoading(false);
         } else {
           toast.error(data.message || "Session expired. Please log in again.");
           navigate("/login");
@@ -52,7 +52,7 @@ const ProtectedRoute = ({ children }) => {
     checkLoginStatus();
   }, [navigate]);
   if (loading) {
-    return <div>Loading...</div>; // You can add a spinner or loading indicator here
+    return <div>Loading...</div>;
   }
 
   return auth.user ? children : <Navigate to="/login" />;
